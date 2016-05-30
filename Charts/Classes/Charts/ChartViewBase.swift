@@ -512,8 +512,13 @@ public class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
         else
         {
             // set the indices to highlight
+<<<<<<< 78038410de4b10460deaf8ca84b1daac2e9fcd05
             entry = _data?.entryForHighlight(h!)
             if (entry == nil)
+=======
+            entry = _data?.getEntryForHighlight(h!)
+            if (entry === nil || entry!.xIndex != h?.xIndex || entry?.value == 0)
+>>>>>>> markers with 0 value
             {
                 h = nil
                 _indicesToHighlight.removeAll(keepCapacity: false)
