@@ -619,11 +619,11 @@ open class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
 
             let pos = getMarkerPosition(highlight: highlight)
 
-            // check bounds
-            if !_viewPortHandler.isInBounds(x: pos.x, y: pos.y)
-            {
-                continue
-            }
+//            // check bounds
+//            if !_viewPortHandler.isInBounds(x: pos.x, y: pos.y)
+//            {
+//                continue
+//            }
 
             // callbacks to update the content
             marker.refreshContent(entry: e, highlight: highlight)
