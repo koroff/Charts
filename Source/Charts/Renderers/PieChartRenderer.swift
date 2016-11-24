@@ -279,7 +279,7 @@ open class PieChartRenderer: DataRenderer
                     
                     context.beginPath()
                     context.addPath(path)
-                    context.fillPath(using: .evenOdd)
+                    context.fillPath()
                 }
             }
             
