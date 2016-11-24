@@ -49,7 +49,7 @@
     
     _chartView.delegate = self;
     
-    _chartView.chartDescription.enabled = NO;
+   // _chartView.debugDescription.enabled = NO;
     
     _chartView.dragEnabled = YES;
     [_chartView setScaleEnabled:YES];
