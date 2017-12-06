@@ -125,6 +125,8 @@ open class PieChartRenderer: DataRenderer
         let radius = chart.radius
         let drawInnerArc = chart.drawHoleEnabled && !chart.drawSlicesUnderHoleEnabled
         let userInnerRadius = drawInnerArc ? radius * chart.holeRadiusPercent : 0.0
+        let linePointRadius = (radius - userInnerRadius) / 2.0
+        let centerLineRadius = radius * chart.holeRadiusPercent + linePointRadius
         
         var visibleAngleCount = 0
         for j in 0 ..< entryCount
@@ -139,6 +141,16 @@ open class PieChartRenderer: DataRenderer
         let sliceSpace = visibleAngleCount <= 1 ? 0.0 : getSliceSpace(dataSet: dataSet)
 
         context.saveGState()
+        
+        let pathInner = CGMutablePath()
+        pathInner.addArc(center: center, radius: centerLineRadius, startAngle: CGFloat(-Double.pi/2), endAngle: CGFloat(Double.pi/2*3), clockwise: false)
+        pathInner.closeSubpath()
+        
+        
+        context.beginPath()
+        context.addPath(pathInner)
+        context.setStrokeColor(UIColor(red: 215/255.0, green: 215/255.0, blue: 215/255.0, alpha: 1.0).cgColor)
+        context.strokePath()
         
         for j in 0 ..< entryCount
         {
@@ -244,11 +256,28 @@ open class PieChartRenderer: DataRenderer
                         }
                     }
                     
+                    
+                    //drawing line rounded endings and center ring
+                    
+                    
+                    let х1 = chart.circleBox.midX + (cos(startAngleOuter * ChartUtils.Math.FDEG2RAD) * centerLineRadius)
+                    let y1 = chart.circleBox.midY + (sin(startAngleOuter * ChartUtils.Math.FDEG2RAD) * centerLineRadius)
+                    
+                    let x2 = chart.circleBox.midX + (cos(sweepAngleOuter * ChartUtils.Math.FDEG2RAD) * centerLineRadius)
+                    let y2 = chart.circleBox.midY + (sin(sweepAngleOuter * ChartUtils.Math.FDEG2RAD) * centerLineRadius)
+                    
+                    path.move(to: CGPoint(x: х1, y: y1))
+                    path.addArc(center: CGPoint(x: х1, y: y1), radius: linePointRadius, startAngle: CGFloat(-Double.pi/2), endAngle: CGFloat(Double.pi/2*3), clockwise: false)
+                    path.closeSubpath()
+                    
+                    path.move(to: CGPoint(x: x2, y: y2))
+                    path.addArc(center: CGPoint(x: x2, y: y2), radius: linePointRadius, startAngle: CGFloat(-Double.pi/2), endAngle: CGFloat(Double.pi/2*3), clockwise: false)
+                    
                     path.closeSubpath()
                     
                     context.beginPath()
                     context.addPath(path)
-                    context.fillPath(using: .evenOdd)
+                    context.fillPath()
                 }
             }
             
@@ -832,7 +861,7 @@ open class PieChartRenderer: DataRenderer
             }
             
             path.closeSubpath()
-            
+
             context.beginPath()
             context.addPath(path)
             context.fillPath(using: .evenOdd)
